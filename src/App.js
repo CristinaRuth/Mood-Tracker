@@ -21,7 +21,27 @@ import {
   CardText
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSmileBeam, faFrown } from '@fortawesome/free-solid-svg-icons';
+import { faSmileBeam, faFrown, faBullseye } from '@fortawesome/free-solid-svg-icons';
+import puppyOne from './images/puppies/1.jpeg';
+import puppyTwo from './images/puppies/2.jpeg';
+import puppyThree from './images/puppies/3.jpeg';
+import puppyFour from './images/puppies/4.jpeg';
+import puppyFive from './images/puppies/5.jpeg';
+import puppySix from './images/puppies/6.jpeg';
+import puppySeven from './images/puppies/7.jpeg';
+import puppyEight from './images/puppies/8.jpeg';
+import puppyNine from './images/puppies/9.jpeg';
+import puppyTen from './images/puppies/10.jpeg';
+import kittenOne from './images/kittens/1.jpeg';
+import kittenTwo from './images/kittens/2.jpeg';
+import kittenThree from './images/kittens/3.jpeg';
+import kittenFour from './images/kittens/4.jpeg';
+import kittenFive from './images/kittens/5.jpeg';
+import kittenSix from './images/kittens/6.jpeg';
+import kittenSeven from './images/kittens/7.jpeg';
+import kittenEight from './images/kittens/8.jpeg';
+import kittenNine from './images/kittens/9.jpeg';
+import kittenTen from './images/kittens/10.jpeg';
 
 class App extends Component {
   constructor(props) {
@@ -29,12 +49,26 @@ class App extends Component {
     this.state = {
       isNavOpen: false,
       isBadMood: false,
-      isGoodMood: false
+      isGoodMood: false,
+      isBullsEye: false,
+      bullsEyeClicks: 0
     };
     this.toggleNav = this.toggleNav.bind(this);
     this.setBadMood = this.setBadMood.bind(this);
     this.setGoodMood = this.setGoodMood.bind(this);
     this.resetMood = this.resetMood.bind(this);
+    this.getRandomPuppyImage = this.getRandomPuppyImage.bind(this);
+    this.getRandomKittenImage = this.getRandomKittenImage.bind(this);
+    this.handleBullsEyeClick = this.handleBullsEyeClick.bind(this);
+  }
+
+  
+  handleBullsEyeClick(event) {
+    event.preventDefault();
+    this.setState(prevState =>({
+      isBullsEye: true,
+bullsEyeClicks: prevState.bullsEyeClicks+1
+    }));
   }
 
   toggleNav() {
@@ -45,22 +79,66 @@ class App extends Component {
 
   setBadMood() {
     this.setState({
-      isBadMood: true
+      isBadMood: true,
+      isBullsEye: false
     });
   }
 
   setGoodMood() {
     this.setState({
-      isGoodMood: true
+      isGoodMood: true,
+      isBullsEye: false
+    })
+  }
+
+  setBullsEye() {
+    this.setState({
+      isBullsEye: true
     })
   }
 
   resetMood() {
     this.setState({
       isBadMood: false,
-      isGoodMood: false
+      isGoodMood: false,
+      isBullsEye: false
     })
   }
+
+  getRandomPuppyImage() {
+    let puppies = [
+      puppyOne,
+      puppyTwo,
+      puppyThree,
+      puppyFour,
+      puppyFive,
+      puppySix,
+      puppySeven,
+      puppyEight,
+      puppyNine,
+      puppyTen
+    ];
+    let result = puppies[Math.floor(Math.random() * puppies.length)];
+    return result;
+  }
+
+  getRandomKittenImage() {
+    let kittens = [
+      kittenOne,
+      kittenTwo,
+      kittenThree,
+      kittenFour,
+      kittenFive,
+      kittenSix,
+      kittenSeven,
+      kittenEight,
+      kittenNine,
+      kittenTen
+    ];
+    let result = kittens[Math.floor(Math.random() * kittens.length)];
+    return result;
+  }
+
 
   render() {
     return (
@@ -85,7 +163,13 @@ class App extends Component {
             isGoodMood={this.state.isGoodMood}
             resetMood={this.resetMood}
             setGoodMood={this.setGoodMood}
-            setBadMood={this.setBadMood} />
+            setBadMood={this.setBadMood}
+            getRandomPuppyImage={this.getRandomPuppyImage}
+            getRandomKittenImage={this.getRandomKittenImage}
+            isBullsEye ={this.state.isBullsEye}
+            handleBullsEyeClick={this.handleBullsEyeClick}
+            bullsEyeClicks={this.state.bullsEyeClicks}
+          />
         </Jumbotron>
         <em>Oct 2018 - Under Construction</em><br />
         &copy; Cristina Ruth<br />
@@ -96,6 +180,13 @@ class App extends Component {
 }
 
 class Content extends Component {
+  // constructor(props){
+  //   super(props);
+  //   this.state = {
+  //     bullsEyeClicks: 0
+  //   }
+  //   //this.handleBullseyeClick = this.handleBullseyeClick.bind(this);
+  // }
   getRandomGoodMoodMessage() {
     let messages = [
       "That's great!",
@@ -123,38 +214,88 @@ class Content extends Component {
     return result;
   }
 
+  getRandomTrueOrFalse() {
+    return (Math.floor(Math.random() * Math.floor(100))) % 2 === 0;
+  }
+
+
   render() {
     if (this.props.isGoodMood) {
       const message = this.getRandomGoodMoodMessage();
       return (
         <Container>
           <Row>
-          <Col>
-          <h1>{message}</h1>
-          </Col>
+            <Col>
+              <h1>{message}</h1>
+            </Col>
           </Row>
-            
+
           <Row>&nbsp;</Row>
           <Row>
             <Col>
-            <Button onClick={this.props.resetMood} color="success" block>Great!</Button>
+              <Button onClick={this.props.resetMood} color="success" block>Great!</Button>
             </Col>
           </Row>
-          </Container>
+        </Container>
+      );
+    }
+    else if (this.props.isBullsEye) {
+      const message = <h1 className="text-center">Here's a BIG button. Keep pressing until you feel better!<br/><br/>
+        <Button size="lg" color="danger"><FontAwesomeIcon icon={faBullseye} onClick={this.props.handleBullsEyeClick}/></Button><br/><br/>
+        {this.props.bullsEyeClicks}
+        </h1>;
+      return (<Container><Row>
+          <Col>
+            {message}
+          </Col>
+        </Row>
+          <Row>&nbsp;</Row>
+          <Row>
+          <Col>
+              <Button onClick={this.props.setBadMood} block color="danger" size="lg">Still Sad <FontAwesomeIcon icon={faFrown} /></Button>
+            </Col>
+            <Col>
+              <Button onClick={this.props.resetMood} block color="success" size="lg">I Feel Better! <FontAwesomeIcon icon={faSmileBeam} /></Button>
+            </Col>
+          </Row>
+        </Container>
       );
     }
     else if (this.props.isBadMood) {
-      const message = this.getRandomBadMoodMessage();
+      const isPuppyOrKitten = this.getRandomTrueOrFalse();
+      const isKeepPressingTarget = this.getRandomTrueOrFalse();
+      let message = null;
+      if (isPuppyOrKitten) {
+        const isPuppy = this.getRandomTrueOrFalse();
+        if (isPuppy) {
+          message = <h1 className="text-center">Here's a cute puppy to cheer you up. <br /><br /><img src={this.props.getRandomPuppyImage()} /></h1>;
+        }
+        else {
+          message = <h1 className="text-center">Here's a cute kitten to cheer you up. <br /><br /><img src={this.props.getRandomKittenImage()} /></h1>;
+        }
+      }
+      else if (isKeepPressingTarget) {
+        message = <h1 className="text-center">Here's a BIG button. Keep pressing until you feel better!<br/><br/>
+        <Button size="lg" color="danger"><FontAwesomeIcon icon={faBullseye} onClick={this.props.handleBullsEyeClick}/></Button><br/><br/>
+        {this.props.bullsEyeClicks}
+        </h1>;
+      }
+      else {
+        message = <h1>{this.getRandomBadMoodMessage()}</h1>;
+      }
       return (
         <Container><Row>
           <Col>
-            <h1>{message}</h1>
-        </Col>
+            {message}
+          </Col>
         </Row>
           <Row>&nbsp;</Row>
           <Row>
             <Col>
-              <Button onClick={this.props.resetMood} block color="success">I Feel Better!</Button>
+              <Button onClick={this.props.setBadMood} block color="danger" size="lg">Still Sad <FontAwesomeIcon icon={faFrown} /></Button>
+            </Col>
+            <Col>
+              <Button onClick={this.props.resetMood} block color="success" size="lg">I Feel Better! <FontAwesomeIcon icon={faSmileBeam} /></Button>
             </Col>
           </Row>
         </Container>
@@ -170,10 +311,10 @@ class Content extends Component {
           <Row>&nbsp;</Row>
           <Row>
             <Col xs="12" sm="6">
-              <Button color="success" size="lg" block onClick={this.props.setGoodMood}><FontAwesomeIcon icon={faSmileBeam} /></Button>
+              <Button color="success" size="lg" block onClick={this.props.setGoodMood}><FontAwesomeIcon icon={faSmileBeam} className="main-icon" /></Button>
             </Col>
             <Col xs="12" sm="6">
-              <Button color="danger" size="lg" block onClick={this.props.setBadMood}><FontAwesomeIcon icon={faFrown} /></Button>
+              <Button color="danger" size="lg" block onClick={this.props.setBadMood}><FontAwesomeIcon icon={faFrown} className="main-icon" /></Button>
             </Col>
           </Row>
         </Container>

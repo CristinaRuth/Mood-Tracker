@@ -1,6 +1,10 @@
-svg.fa-smile-beam,
-svg.fa-frown {
+svg.fa-smile-beam.main-icon,
+svg.fa-frown.main-icon {
     /* height: 200px; */
     width: 4em !important;
     height: 4em !important;
+}
+svg.fa-bullseye{
+    width: 6em !important;
+    height: 6em !important;
 }
