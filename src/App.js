@@ -21,7 +21,7 @@ import {
   CardText
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSmileBeam, faFrown, faBullseye } from '@fortawesome/free-solid-svg-icons';
+import { faSmileBeam, faFrown, faBullseye, faSkull } from '@fortawesome/free-solid-svg-icons';
 import puppyOne from './images/puppies/1.jpeg';
 import puppyTwo from './images/puppies/2.jpeg';
 import puppyThree from './images/puppies/3.jpeg';
@@ -51,7 +51,8 @@ class App extends Component {
       isBadMood: false,
       isGoodMood: false,
       isBullsEye: false,
-      bullsEyeClicks: 0
+      bullsEyeClicks: 0,
+      isBullsEyeExplosion: false
     };
     this.toggleNav = this.toggleNav.bind(this);
     this.setBadMood = this.setBadMood.bind(this);
@@ -65,10 +66,21 @@ class App extends Component {
   
   handleBullsEyeClick(event) {
     event.preventDefault();
+    //determine if we exploded -> anything 5 & under
+    let isExplosion = Math.floor(Math.random() * Math.floor(100)) <= 5;
+
+    if (isExplosion) {
+      this.setState({
+        isBullsEye: true,
+        isBullsEyeExplosion: true
+      });
+    }
+    else{ 
     this.setState(prevState =>({
       isBullsEye: true,
 bullsEyeClicks: prevState.bullsEyeClicks+1
     }));
+  }
   }
 
   toggleNav() {
@@ -101,7 +113,9 @@ bullsEyeClicks: prevState.bullsEyeClicks+1
     this.setState({
       isBadMood: false,
       isGoodMood: false,
-      isBullsEye: false
+      isBullsEye: false,
+      bullsEyeClicks: 0,
+      isBullsEyeExplosion: false
     })
   }
 
@@ -169,6 +183,7 @@ bullsEyeClicks: prevState.bullsEyeClicks+1
             isBullsEye ={this.state.isBullsEye}
             handleBullsEyeClick={this.handleBullsEyeClick}
             bullsEyeClicks={this.state.bullsEyeClicks}
+            isBullsEyeExplosion={this.state.isBullsEyeExplosion}
           />
         </Jumbotron>
         <em>Oct 2018 - Under Construction</em><br />
@@ -240,6 +255,28 @@ class Content extends Component {
       );
     }
     else if (this.props.isBullsEye) {
+      if (this.props.isBullsEyeExplosion) {
+        const message = <h1 className="text-center">OH NO!! The button exploded after {this.props.bullsEyeClicks} clicks :(<br/><br/>
+        <FontAwesomeIcon icon={faSkull} style="color: red"/><br/><br/>
+        </h1>;
+      return (<Container><Row>
+          <Col>
+            {message}
+          </Col>
+        </Row>
+          <Row>&nbsp;</Row>
+          <Row>
+          {/* <Col>
+              <Button onClick={this.props.setBadMood} block color="danger" size="lg"> <FontAwesomeIcon icon={faFrown} /></Button>
+            </Col> */}
+            <Col>
+              <Button onClick={this.props.resetMood} block color="success" size="lg">Try Again <FontAwesomeIcon icon={faSmileBeam} /></Button>
+            </Col>
+          </Row>
+        </Container>
+      );
+      }
+      else {
       const message = <h1 className="text-center">Here's a BIG button. Keep pressing until you feel better!<br/><br/>
         <Button size="lg" color="danger"><FontAwesomeIcon icon={faBullseye} onClick={this.props.handleBullsEyeClick}/></Button><br/><br/>
         {this.props.bullsEyeClicks}
@@ -260,6 +297,7 @@ class Content extends Component {
           </Row>
         </Container>
       );
+    }
     }
     else if (this.props.isBadMood) {
       const isPuppyOrKitten = this.getRandomTrueOrFalse();

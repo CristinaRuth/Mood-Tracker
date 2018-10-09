@@ -4,7 +4,8 @@ svg.fa-frown.main-icon {
     width: 4em !important;
     height: 4em !important;
 }
-svg.fa-bullseye{
+svg.fa-bullseye,
+svg.fa-skull{
     width: 6em !important;
     height: 6em !important;
 }
